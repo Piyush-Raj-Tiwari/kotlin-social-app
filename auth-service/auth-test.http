@@ -1,0 +1,12 @@
+###get the public key to expose public key to other services
+GET http://localhost:8081/auth/public-key
+
+###example to login
+POST http://localhost:8081/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "password"
+}
+
