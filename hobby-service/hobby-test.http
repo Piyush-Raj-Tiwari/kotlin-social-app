@@ -1,0 +1,45 @@
+### Health check
+GET http://localhost:8081/health
+
+###
+
+### Get all hobbies
+GET http://localhost:8081/hobbies
+
+###
+
+### Get hobby by id (valid)
+GET http://localhost:8081/hobbies/dance
+
+###
+
+### Get hobby by id (invalid)
+GET http://localhost:8081/hobbies/invalid_hobby
+
+###
+
+### Join hobby
+POST http://localhost:8081/hobbies/dance/join
+X-User-Id: user1
+
+###
+
+### Join hobby again (idempotent)
+POST http://localhost:8081/hobbies/dance/join
+X-User-Id: user1
+
+###
+
+### Get user's hobbies
+GET http://localhost:8081/users/user1/hobbies
+
+###
+
+### Leave hobby
+POST http://localhost:8081/hobbies/dance/leave
+X-User-Id: user1
+
+###
+
+### Get user's hobbies after leaving
+GET http://localhost:8081/users/user1/hobbies

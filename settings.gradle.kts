@@ -14,3 +14,5 @@ rootProject.name = "task-scheduler-platform"
 
 include("task-service")
 include("auth-service")
+
+include("hobby-service")
