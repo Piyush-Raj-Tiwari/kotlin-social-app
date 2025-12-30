@@ -1,0 +1,86 @@
+### Create a new post
+# Expected:
+# - Status: 200 OK
+# - Response body contains:
+#   - id: newly generated UUID
+#   - authorId: 11111111-1111-1111-1111-111111111111
+#   - hobbyId: 22222222-2222-2222-2222-222222222222
+#   - content: "This is my first post in this hobby"
+#   - likeCount: 0
+#   - commentCount: 0
+#   - createdAt: current timestamp
+POST http://localhost:8082/posts
+Content-Type: application/json
+X-User-Id: 11111111-1111-1111-1111-111111111111
+
+{
+  "hobbyId": "22222222-2222-2222-2222-222222222222",
+  "content": "This is my first post in this hobby"
+}
+
+
+### Create another post
+# Expected:
+# - Status: 200 OK
+# - New post created with a different id
+# - Same authorId and hobbyId as above
+# - createdAt is later than the first post
+POST http://localhost:8082/posts
+Content-Type: application/json
+X-User-Id: 11111111-1111-1111-1111-111111111111
+
+{
+  "hobbyId": "22222222-2222-2222-2222-222222222222",
+  "content": "Second post under the same hobby"
+}
+
+
+### Get posts by hobby
+# Expected:
+# - Status: 200 OK
+# - Response is a JSON array
+# - Array contains both posts created above
+# - Posts are ordered by createdAt DESC (newest first)
+# - All posts have hobbyId = 22222222-2222-2222-2222-222222222222
+GET http://localhost:8082/posts/hobby/22222222-2222-2222-2222-222222222222?limit=10
+
+
+### Get posts by author
+# Expected:
+# - Status: 200 OK
+# - Response is a JSON array
+# - Array contains all posts created by author:
+#   11111111-1111-1111-1111-111111111111
+# - Posts are ordered by createdAt DESC
+GET http://localhost:8082/posts/user/11111111-1111-1111-1111-111111111111?limit=10
+
+
+### Get post by ID
+# Expected:
+# - Status: 200 OK if post exists
+# - Response body matches the post with the given id
+# - If the ID does not exist:
+#   - Status: 404 Not Found
+GET http://localhost:8082/posts/<POST_ID>
+
+
+### Get posts by hobby with cursor
+# Expected:
+# - Status: 200 OK
+# - Response is a JSON array with at most 1 post (limit=1)
+# - Returned post has createdAt < <CURSOR_INSTANT>
+# - Used to simulate infinite scrolling
+GET http://localhost:8082/posts/hobby/22222222-2222-2222-2222-222222222222?limit=1&cursor=<CURSOR_INSTANT>
+
+
+### Missing X-User-Id header
+# Expected:
+# - Status: 401 Unauthorized
+# - Response body contains an error message indicating missing header
+POST http://localhost:8082/posts
+Content-Type: application/json
+
+{
+  "hobbyId": "22222222-2222-2222-2222-222222222222",
+  "content": "This should fail"
+}

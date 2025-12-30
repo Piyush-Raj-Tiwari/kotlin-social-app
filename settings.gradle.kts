@@ -16,3 +16,4 @@ include("task-service")
 include("auth-service")
 
 include("hobby-service")
+include("post-service")
